@@ -43,7 +43,7 @@ In the piece of code above, you won't be able to do a ``` res.status(200).send("
 
 
 ## Overview
-In this brief step-by-step guide in 3 steps:
+In this brief 3 steps guide, you will:
 * A - [Configure Your Google Cloud Functions Environment](#step-a---create-a-new-google-cloud-functions-on-gcp)
 * B - [Configure Your Local Machine](#step-b---configure-your-local-machine)
 * C - [Build & Deploy your GraphQl dummy API](#step-c---create-&-deploy-your-graphql-dummy-api-from-your-local-machine)
