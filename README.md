@@ -3,7 +3,7 @@
 # GraphiQL For Google Cloud Functions
 ## Table Of Content
 * [TL;DR](#tl;dr)
-* [Overview](#Overview)
+* [Overview](#overview)
 * [Step A - Configure Your Google Cloud Functions Environment](#step-a---create-a-new-google-cloud-functions-on-gcp)
 * [Step B - Configure Your Local Machine](#step-b---configure-your-local-machine)
 * [Step C - Build & Deploy your GraphQl dummy API](#step-c---create-&-deploy-your-graphql-dummy-api-from-your-local-machine)
@@ -11,6 +11,7 @@
 * [This Is What We re Up To](#this-is-what-we-re-up-to)
 
 ## TL;DR
+If you're already familiar with Google Cloud Functions, GraphQl, and GraphiQl, then this TL;DR might be good enough. Otherwise, jump to the next [Overview](#overview) section, and follow each steps.
 #### Installation
 ```bash
 npm install graphql google-graphql-functions --save
