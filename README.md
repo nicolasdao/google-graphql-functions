@@ -219,6 +219,7 @@ In the above:
 * Finally, we've packaged all of this into our GraphiQL tool (google-graphql-functions.js) so that we have an option to expose the Facebook GraphiQL UI to ease development, testing, and collaboration. More details about the section called [Option Details](#options-details).
 
 4 - Test this code locally:
+
 *Make sure you've installed the 'Google Cloud Functions Emulator' as explained in [Step B.1](#step-b---configure-your-local-machine)*
 * Start your local Google Cloud Functions server: ``` functions start ```
 * Deploy your code to the local server: ``` functions deploy main --trigger-http ```
