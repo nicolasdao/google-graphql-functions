@@ -211,7 +211,7 @@ exports.main = graphQl.serveHTTP(graphql_options, (req, res, results) => {
 // (http://dev.apollodata.com/tools/), as well as on the official Facebook GraphQl website 
 // (http://graphql.org/learn/).
 ```
-_More details on those code above in annex [A.3. GraphQl Code Details](#a3-graphql-code-details)_
+_More details on the code above in annex [A.3. GraphQl Code Details](#a3-graphql-code-details)_
 
 **4** - Test this code locally:
 
