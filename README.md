@@ -167,17 +167,17 @@ const product = [{
     name: 'Magic Wand',
     id: 1,
     brandRefId: 'm1',
-    shortDescription: 'Take that in your face!'
+    shortDescription: "Piece of wood with some magic shenanigan."
 }, {
-    name: 'Gag ball',
+    name: 'Catapult',
     id: 2,
     brandRefId: 'm2',
-    shortDescription: 'Take that in your mouth!'
+    shortDescription: "Contraption that throw heavy rocks to the face of my ennemies."
 }, {
     name: 'Wig',
     id: 3,
     brandRefId: 'm2',
-    shortDescription: "What's on your head!"
+    shortDescription: "Weird thing I wear when I'm drunk."
 }];
 
 
