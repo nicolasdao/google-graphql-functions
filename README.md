@@ -172,7 +172,7 @@ const product = [{
     name: 'Catapult',
     id: 2,
     brandRefId: 'm2',
-    shortDescription: "Contraption that throw heavy rocks to the face of my ennemies."
+    shortDescription: "Contraption that throws heavy rocks at my ennemy's face."
 }, {
     name: 'Wig',
     id: 3,
