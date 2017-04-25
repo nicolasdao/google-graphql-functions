@@ -1,6 +1,6 @@
 {
   "name": "google-graphql-functions",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Run graphql queries on Google Cloud Functions (beta). This package can serve a graphiQL interface out-of-the-box. This project is mainly a modification of the excellent express-graphiql maintained by Facebook. This project is published using a BSD-style licence.",
   "contributors": [
     "Nicolas Dao <nic@neap.co> (https://neap.co/)"
