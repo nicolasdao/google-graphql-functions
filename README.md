@@ -2,11 +2,11 @@
 
 # GraphiQL For Google Cloud Functions
 ## Table Of Content
-* [TL;DR](#tl;dr)
+* [TL;DR](#tldr)
 * [Overview](#overview)
 * [Step A - Configure Your Google Cloud Functions Environment](#step-a---create-a-new-google-cloud-functions-on-gcp)
 * [Step B - Configure Your Local Machine](#step-b---configure-your-local-machine)
-* [Step C - Build & Deploy your GraphQl dummy API](#step-c---create-&-deploy-your-graphql-dummy-api-from-your-local-machine)
+* [Step C - Create & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-from-your-local-machine)
 * [Options Details](#options-details)
 * [This Is What We re Up To](#this-is-what-we-re-up-to)
 
