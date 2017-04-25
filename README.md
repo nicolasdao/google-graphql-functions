@@ -46,13 +46,13 @@ In the piece of code above, you won't be able to do a ``` res.status(200).send("
 In this brief 3 steps guide, you will:
 * A - [Configure Your Google Cloud Functions Environment](#step-a---create-a-new-google-cloud-functions-on-gcp)
 * B - [Configure Your Local Machine](#step-b---configure-your-local-machine)
-* C - [Build & Deploy your GraphQl dummy API](#step-c---create-&-deploy-your-graphql-dummy-api-from-your-local-machine)
+* C - [Build & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-from-your-local-machine)
 
-**google-graphql-functions** will help you deploy your first dummy GraphQl API to a Google Cloud Functions endpoint. The data we are using are simply hardcoded for the sake of brevity, but it is easy to imagine how you could replace that bit of code with your own DB or external APIs requests. 
+**google-graphql-functions** will help you deploy your first dummy GraphQl API to a Google Cloud Functions endpoint. The data are hardcoded for the sake of brevity, but you could easily replace that bit of code with your own DB or external APIs requests. 
 
-Beyond just querying GraphQl, **google-graphql-functions** will also allow you to expose a [GraphiQl UI](https://github.com/graphql/graphiql) to help develop, test, and collaborate. This project has been fork of the excellent [express-graphql](https://github.com/graphql/express-graphql) package.
+Beyond just querying GraphQl, **google-graphql-functions** will also allow you to expose a [GraphiQl UI](https://github.com/graphql/graphiql) to help develop, test, and collaborate. This project has been forked from the excellent [express-graphql](https://github.com/graphql/express-graphql) package.
 
-If you're only interested in knowing how to program GraphQl APIs for Google Cloud Functions and are already familiar with developing and deploying code to Google Cloud Functions, then jump straight to [Step C - Build & Deploy your GraphQl dummy API](#step-c---create-&-deploy-your-graphql-dummy-api-from-your-local-machine).
+If you're only interested in knowing how to program GraphQl APIs for Google Cloud Functions and are already familiar with developing and deploying code for Google Cloud Functions, then jump straight to [Step C - Create & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-from-your-local-machine).
 
 ## Step A - Create a New Google Cloud Functions On GCP
 1 - Create a Google Account & log in to your [Google Cloud Console](https://console.cloud.google.com).
