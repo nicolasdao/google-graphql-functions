@@ -73,7 +73,7 @@ If you're only interested in knowing how to program GraphQl APIs for Google Clou
 * gcloud beta: 
 
 ``` gcloud components install beta ```
-* [Google Cloud Function Emulator (allows to deploy your GCF locally for dev. purposes)](https://github.com/GoogleCloudPlatform/cloud-functions-emulator): 
+* [Google Cloud Functions Emulator (allows to deploy your GCF locally for dev. purposes)](https://github.com/GoogleCloudPlatform/cloud-functions-emulator): 
 
 ``` npm install -g @google-cloud/functions-emulator ```
 
@@ -220,12 +220,14 @@ In the above:
 
 4 - Test this code locally:
 
-*Make sure you've installed the 'Google Cloud Functions Emulator' as explained in [Step B.1](#step-b---configure-your-local-machine)*
+*(Make sure you've installed the 'Google Cloud Functions Emulator' as explained in [Step B.1](#step-b---configure-your-local-machine))*
 * Start your local Google Cloud Functions server: ``` functions start ```
 * Deploy your code to the local server: ``` functions deploy main --trigger-http ```
 * Copy the URL displayed in the terminal, and append to it the endpointURL defined in the code above. This should look like [http://localhost:8010/[PROJECT-ID]/us-central1/main/graphiql](http://localhost:8010/[PROJECT-ID]/us-central1/main/graphiql). Your browser should return the GraphiQL UI, and you should be able to start querying. As you're running queries in the UI, you'll notice that the URL's query string automatically updates. This is the actually GraphQl query. To test what a normal client would receive, simply remove the /graphiql in the URL, and you should receive a JSON object. 
 
 5 - Deploy your code to your Google Cloud Function on GCP
+
+*(Make sure you've installed the 'gcloud beta' as explained in [Step B.1](#step-b---configure-your-local-machine))*
 
 As of today (Apr 17), the current version of node v7.8.0, which stopped using nested dependencies inside the node_modules. However, Google Cloud Functions still runs using node v6.9.1, which still uses nested dependencies. The issue is that our code will then contains more than one graphql.js package which will result in this weird bug: 
 
