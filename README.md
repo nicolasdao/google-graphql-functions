@@ -9,10 +9,10 @@
 * [Step C - Create & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-from-your-local-machine)
 * [This Is What We re Up To](#this-is-what-we-re-up-to)
 * [Annexes](#annexes)
-  - [A.1. Options Details](#a.1.-options-details)
-  - [A.2. List Of Dependencies](#a.2.-list-of-dependencies)
-  - [A.3. GraphQl Code Details](#a.3.-graphql-code-details)
-  - [A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook](#a.4.-why-you-need-to-add--npm-dedupe--as-a-post-install-hook)
+  - [A.1. Options Details](#a1-options-details)
+  - [A.2. List Of Dependencies](#a2-list-of-dependencies)
+  - [A.3. GraphQl Code Details](#a3-graphql-code-details)
+  - [A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook](#a4-why-you-need-to-add-npm-dedupe-as-a-post-install-hook)
 
 ## TL;DR
 If you're already familiar with Google Cloud Functions, GraphQl, and GraphiQl, then this TL;DR might be good enough. Otherwise, jump to the next [Overview](#overview) section, and follow each steps.
@@ -107,7 +107,7 @@ npm init
 ```bash 
 npm install graphql graphql-tools google-graphql-functions lodash --save
 ```
-_More details on those dependencies in annex [A.2. List Of Dependencies](#a.2.-list-of-dependencies)_
+_More details on those dependencies in annex [A.2. List Of Dependencies](#a2-list-of-dependencies)_
 
 **3** - Paste this demo code into the index.js
 ```js
@@ -211,7 +211,7 @@ exports.main = graphQl.serveHTTP(graphql_options, (req, res, results) => {
 // (http://dev.apollodata.com/tools/), as well as on the official Facebook GraphQl website 
 // (http://graphql.org/learn/).
 ```
-_More details on those code above in annex [A.3. GraphQl Code Details](#a.3.-graphql-code-details)_
+_More details on those code above in annex [A.3. GraphQl Code Details](#a3-graphql-code-details)_
 
 **4** - Test this code locally:
 
@@ -226,7 +226,7 @@ _More details on those code above in annex [A.3. GraphQl Code Details](#a.3.-gra
 
 The steps to deploy:
 
-* Add the following in your package.json (more details on why we need this in annex [A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook](#a.4.-why-you-need-to-add--npm-dedupe--as-a-post-install-hook)):
+* Add the following in your package.json (more details on why we need this in annex [A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook](#a4-why-you-need-to-add-npm-dedupe-as-a-post-install-hook)):
   ```js
   "scripts": {
   	"postinstall": "npm dedupe"
@@ -277,7 +277,7 @@ In the above [index.js](#step-c---create--deploy-your-graphql-dummy-api-from-you
 * We've created a GraphQl 'schema'. It is a string, but this is just an opiniated implementation from the Apollo team (i.e. graphql-tools.js). graphql.js choosed a more programmatic approach.
 * We've then created a resolver called 'productResolver', that interprets the GraphQl query so that you can query your backend, whatever it is (e.g. DB, other APIs, ...). In this example, we only have one resolver, but you can have as many as you need. That's why we have the line of code '_.merge(productResolver.root)'.
 * Now that we have both a schema and all the resolvers, we can actually create an 'Executable Schema'. This is where the magic happens.
-* Finally, we've packaged all of this into our GraphiQL tool (google-graphql-functions.js) so that we have an option to expose the Facebook GraphiQL UI to ease development, testing, and collaboration. More details about the section called [Option Details](#options-details).
+* Finally, we've packaged all of this into our GraphiQL tool (google-graphql-functions.js) so that we have an option to expose the Facebook GraphiQL UI to ease development, testing, and collaboration. More details about the section called [Option Details](#a1-options-details).
 
 ### A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook 
 As of today (Apr 17), the current stable version of node is v7.8.0, which stopped using nested dependencies inside the node_modules. However, Google Cloud Functions still runs using node v6.9.1, which still uses nested dependencies. The issue is that our code will then contains more than one graphql.js package which will result in this weird bug: 
