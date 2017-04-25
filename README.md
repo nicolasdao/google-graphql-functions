@@ -105,9 +105,9 @@ npm install graphql graphql-tools google-graphql-functions lodash --save
 ```
 _Description_
 - [graphql.js](https://github.com/graphql/graphql-js): This is the official Facebook GraphQl lib. Most of the open-source tools you'll encounter are built on top of it.
-- [graphql-tools.js](https://github.com/apollographql/graphql-tools): This is the [Apollo GraphQl](http://dev.apollodata.com/) tools. Apollo is an awesome set of tools built on top of graphql.js that "make open source software and commercial tools to help developers use GraphQL". Specifically, graphql-tools.js make building GraphQl schema and building resolver less of a pain than using vanilla graphql.js.
+- [graphql-tools.js](https://github.com/apollographql/graphql-tools): This is the [Apollo GraphQl](http://dev.apollodata.com/) tools. Apollo is an awesome set of tools built on top of graphql.js that *"make open source software and commercial tools to help developers use GraphQL"*. Specifically, graphql-tools.js make building GraphQl schemas and building resolvers less of a pain than using vanilla graphql.js.
 - [google-graphql-functions.js](https://github.com/nicolasdao/google-graphql-functions): Our sugar code that glues the Google Cloud Functions node.js server to your standard GraphQl schema. It also exposes a [GraphiQl UI](https://github.com/graphql/graphiql) (if the option graphiql is set to true), which is darn useful when developing your API, or if you want to expose your API to collaborators. Not only will they access great documentation out-of-the-box, they will also be able to query your GraphQl API with a nice auto-complete (try a live demo [here](https://graphql.org/swapi-graphql/)). 
-- [lodash.js](https://github.com/lodash/lodash): "A modern JavaScript utility library delivering modularity, performance, & extras.". Usually used to perform functional style programming. Trying it is loving it. 
+- [lodash.js](https://github.com/lodash/lodash): *"A modern JavaScript utility library delivering modularity, performance, & extras."*. Usually used to perform functional style programming. Trying it is loving it. 
 
 3 - Paste this demo code into the index.js
 ```js
@@ -213,12 +213,13 @@ exports.main = graphQl.serveHTTP(graphql_options, (req, res, results) => {
 ```
 
 In the above:
-* We've created a GraphQl 'schema'. THe fact that this is a string is just an opiniated implementation from the Apollo team (i.e. graphql-tools.js). graphql.js choosed a more programmatic approach.
+* We've created a GraphQl 'schema'. It is a string, but this is just an opiniated implementation from the Apollo team (i.e. graphql-tools.js). graphql.js choosed a more programmatic approach.
 * We've then created a resolver called 'productResolver', that interprets the GraphQl query so that you can query your backend, whatever it is (e.g. DB, other APIs, ...). In this example, we only have one resolver, but you can have as many as you need. That's why we have the line of code '_.merge(productResolver.root)'.
-* Now that we have both a schema and all the resolvers, we can actually create an 'Executable Schema'. This is really what makes the magic happens.
-* Finally, we package all of this into our GraphiQL tool (google-graphql-functions.js) so that we have an option to expose the Facebook GraphiQL UI to ease development, testing, and collaboration. More details about the section called [Option Details](#options-details).
+* Now that we have both a schema and all the resolvers, we can actually create an 'Executable Schema'. This is where the magic happens.
+* Finally, we've packaged all of this into our GraphiQL tool (google-graphql-functions.js) so that we have an option to expose the Facebook GraphiQL UI to ease development, testing, and collaboration. More details about the section called [Option Details](#options-details).
 
 4 - Test this code locally:
+*Make sure you've installed the 'Google Cloud Functions Emulator' as explained in [Step B.1](#step-b---configure-your-local-machine)*
 * Start your local Google Cloud Functions server: ``` functions start ```
 * Deploy your code to the local server: ``` functions deploy main --trigger-http ```
 * Copy the URL displayed in the terminal, and append to it the endpointURL defined in the code above. This should look like [http://localhost:8010/[PROJECT-ID]/us-central1/main/graphiql](http://localhost:8010/[PROJECT-ID]/us-central1/main/graphiql). Your browser should return the GraphiQL UI, and you should be able to start querying. As you're running queries in the UI, you'll notice that the URL's query string automatically updates. This is the actually GraphQl query. To test what a normal client would receive, simply remove the /graphiql in the URL, and you should receive a JSON object. 
