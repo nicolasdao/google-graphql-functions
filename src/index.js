@@ -186,7 +186,7 @@ function graphqlHTTP(options) {
                     rootValue,
                     context,
                     variables,
-                    operationName ? 
+                    operationName
                 );
             } catch (contextError) {
                 // Return 400: Bad Request if any execution context errors exist.
