@@ -112,7 +112,7 @@ function graphqlHTTP(options) {
             // Get GraphQL params from the request and POST body data.
             query = params.query;
             variables = params.variables;
-            operationName = params.operationName;
+            operationName = params.operationName && params.operationName != "undefined" ? params.operationName : null;
             showGraphiQL = graphiql && canDisplayGraphiQL(request, params);
 
             if (showGraphiQL && endpointURL) {
@@ -186,7 +186,7 @@ function graphqlHTTP(options) {
                     rootValue,
                     context,
                     variables,
-                    operationName
+                    operationName ? 
                 );
             } catch (contextError) {
                 // Return 400: Bad Request if any execution context errors exist.
