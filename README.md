@@ -6,7 +6,7 @@
 * [Overview](#overview)
 * [Step A - Configure Your Google Cloud Functions Environment](#step-a---create-a-new-google-cloud-functions-on-gcp)
 * [Step B - Configure Your Local Machine](#step-b---configure-your-local-machine)
-* [Step C - Create & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-from-your-local-machine)
+* [Step C - Create & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-to-your-local-machine)
 * [This Is What We re Up To](#this-is-what-we-re-up-to)
 * [Annexes](#annexes)
   - [A.1. Options Details](#a1-options-details)
@@ -48,18 +48,21 @@ exports.helloWorld = graphQl.serveHTTP(graphql_options, (req, res, results) => {
 ```
 
 #### WARNING
-In the piece of code above, you won't be able to do a ``` res.status(200).send("Hello World") ``` as the http header will already be set the graphQl interpreter. This is a GraphQl server. Therefore, it only returns GraphQl responses. If you need to manipulate data, you will have to do this inside the resolver. This is beyond the scope of this document. You can find a simple example below, under the [Step C](#step-c---create-&-deploy-your-graphql-dummy-api-from-your-local-machine), and read more about it on the awesome [Apollo's website](http://dev.apollodata.com/tools/), as well as on the official Facebook [GraphQl website](http://graphql.org/learn/). 
+In the piece of code above, you won't be able to do a ``` res.status(200).send("Hello World") ``` as the http header will already be set the graphQl interpreter. This is a GraphQl server. Therefore, it only returns GraphQl responses. If you need to manipulate data, you will have to do this inside the resolver. This is beyond the scope of this document. You can find a simple example below, under the [Step C](#step-c---create-&-deploy-your-graphql-dummy-api-to-your-local-machine), and read more about it on the awesome [Apollo's website](http://dev.apollodata.com/tools/), as well as on the official Facebook [GraphQl website](http://graphql.org/learn/). 
 
 
 ## Overview
+
+**_google-graphql-functions_** is a JS module that will help you to deploy your first dummy GraphQl API to a Google Cloud Functions endpoint, or to your local machine. The data are hardcoded for the sake of brevity, but you could easily replace that bit of code with your own DB or external APIs requests. 
+
+Beyond just querying GraphQl, **_google-graphql-functions_** will also allow you to expose a [_GraphiQl UI_](https://github.com/graphql/graphiql) to help develop, test, and collaborate. **_GraphiQl_** is nothing more than a HTML page that contains your own GraphQl schema. You're responsible for hosting it yourself, and to inject your schema into it so your clients can interact with your GraphQl api in a friendly way. It supports validation as well as auto-complete.
+
+This project has been forked from the excellent [express-graphql](https://github.com/graphql/express-graphql) package.
+
 In this brief 3 steps guide, you will:
 * A - [Configure Your Google Cloud Functions Environment](#step-a---create-a-new-google-cloud-functions-on-gcp)
 * B - [Configure Your Local Machine](#step-b---configure-your-local-machine)
-* C - [Build & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-from-your-local-machine)
-
-**google-graphql-functions** will help you deploy your first dummy GraphQl API to a Google Cloud Functions endpoint. The data are hardcoded for the sake of brevity, but you could easily replace that bit of code with your own DB or external APIs requests. 
-
-Beyond just querying GraphQl, **google-graphql-functions** will also allow you to expose a [GraphiQl UI](https://github.com/graphql/graphiql) to help develop, test, and collaborate. This project has been forked from the excellent [express-graphql](https://github.com/graphql/express-graphql) package.
+* C - [Build & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-to-your-local-machine)
 
 If you're only interested in knowing how to program GraphQl APIs for Google Cloud Functions and are already familiar with developing and deploying code for Google Cloud Functions, then jump straight to [Step C - Create & Deploy your GraphQl dummy API](#step-c---create--deploy-your-graphql-dummy-api-from-your-local-machine).
 
@@ -100,7 +103,7 @@ If you're only interested in knowing how to program GraphQl APIs for Google Clou
 
   **``` gcloud config set project [YOUR-PROJECT-ID] ```**
 
-## Step C - Create & Deploy your GraphQl dummy API From Your Local Machine
+## Step C - Create & Deploy your GraphQl dummy API To Your Local Machine
 **1** - Create a new Google Could Functions Project
 ```bash
 mkdir graphql-cloud-function
