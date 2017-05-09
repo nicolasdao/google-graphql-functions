@@ -15,7 +15,12 @@
   - [A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook](#a4-why-you-need-to-add-npm-dedupe-as-a-post-install-hook)
 
 ## TL;DR
-If you're already familiar with Google Cloud Functions, GraphQl, and GraphiQl, then this TL;DR might be good enough. Otherwise, jump to the next [Overview](#overview) section, and follow each steps.
+If you're already familiar with Google Cloud Functions, GraphQl, and GraphiQl, then this TL;DR might be good enough. Otherwise, jump to the next [Overview](#overview) section, and follow each steps. 
+
+If you're totally unfamiliar with GraphQl, here is a series of intro posts that might be useful to provide some context:
+- [GraphQL Overview - Getting Started with GraphQL and Node.js](https://blog.risingstack.com/graphql-overview-getting-started-with-graphql-and-nodejs/)
+- [Introduction to GraphQL](http://graphql.org/learn/)
+
 #### Installation
 ```bash
 npm install graphql google-graphql-functions --save
