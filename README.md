@@ -55,7 +55,7 @@ In the piece of code above, you won't be able to do a ``` res.status(200).send("
 
 **_google-graphql-functions_** is a JS module that will help you to deploy your first dummy GraphQl API to a Google Cloud Functions endpoint, or to your local machine. The data are hardcoded for the sake of brevity, but you could easily replace that bit of code with your own DB or external APIs requests. 
 
-Beyond just querying GraphQl, **_google-graphql-functions_** will also allow you to expose a [_GraphiQl UI_](https://github.com/graphql/graphiql) to help develop, test, and collaborate. **_GraphiQl_** is nothing more than a HTML page that contains your own GraphQl schema. You're responsible for hosting it yourself, and to inject your schema into it so your clients can interact with your GraphQl api in a friendly way. It supports validation as well as auto-complete.
+Beyond just querying GraphQl, **_google-graphql-functions_** will also allow you to expose a [_GraphiQl UI_](https://github.com/graphql/graphiql) to help develop, test, and collaborate. **_GraphiQl_** is nothing more than an HTML page that contains your own GraphQl schema. You're responsible for hosting it as well as injecting your schema into it so that your clients can interact with your GraphQl api in a friendly way. It supports validation as well as auto-complete.
 
 This project has been forked from the excellent [express-graphql](https://github.com/graphql/express-graphql) package.
 
