@@ -58,6 +58,7 @@ function graphqlHTTP(options) {
         let operationName;
         let validationRules;
         let endpointURL;
+        let schemaAST;
 
         // Promises are used as a mechanism for capturing any thrown errors during
         // the asynchronous process below.
@@ -94,6 +95,7 @@ function graphqlHTTP(options) {
             formatErrorFn = optionsData.formatError;
             extensionsFn = optionsData.extensions;
             endpointURL = optionsData.endpointURL;
+            schemaAST = optionsData.schemaAST;
 
             validationRules = graphql.specifiedRules;
             if (optionsData.validationRules) {
@@ -229,7 +231,7 @@ function graphqlHTTP(options) {
             }
             // If allowed to show GraphiQL, present it instead of JSON.
             if (showGraphiQL) {
-                const payload = renderGraphiQL({ query, variables, operationName, result });
+                const payload = renderGraphiQL({ query, variables, operationName, result, schemaAST });
                 response.setHeader('Content-Type', 'text/html; charset=utf-8');
                 sendResponse(response, payload);
             } else {
