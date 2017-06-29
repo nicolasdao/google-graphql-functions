@@ -18,11 +18,11 @@
  */
 
 // Current latest version of GraphiQL.
-const GRAPHIQL_VERSION = '0.9.3';
+const GRAPHIQL_VERSION = '0.9.3'
 
 // Ensures string values are safe to be used within a <script> tag.
 function safeSerialize(data) {
-    return data ? JSON.stringify(data).replace(/\//g, '\\/') : 'undefined';
+	return data ? JSON.stringify(data).replace(/\//g, '\\/') : 'undefined'
 }
 
 /**
@@ -33,18 +33,18 @@ function safeSerialize(data) {
  * requested query.
  */
 module.exports = function renderGraphiQL(data) {
-    const queryString = data.query;
-    const variablesString = data.variables ? JSON.stringify(data.variables, null, 2) : null;
-    const resultString = data.result ? JSON.stringify(data.result, null, 2) : null;
-    const operationName = data.operationName;
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    const schemaAST = data.schemaAST;
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
+	const queryString = data.query
+	const variablesString = data.variables ? JSON.stringify(data.variables, null, 2) : null
+	const resultString = data.result ? JSON.stringify(data.result, null, 2) : null
+	const operationName = data.operationName
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	const schemaAST = data.schemaAST
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /* eslint-disable max-len */
-    return `<!--
+	/* eslint-disable max-len */
+	return `<!--
 The request to this GraphQL server provided the header "Accept: text/html"
 and as a result has been presented GraphiQL - an in-browser IDE for
 exploring GraphQL.
@@ -1757,5 +1757,5 @@ add "&raw" to the end of the URL within a browser.
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////// -->
 </body>
-</html>`;
+</html>`
 }

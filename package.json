@@ -7,7 +7,9 @@
   ],
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint src/",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,10 @@
     "http-errors": "^1.6.1",
     "querystring": "^0.2.0",
     "raw-body": "^2.2.0",
+    "standard-version": "^4.2.0",
     "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.1.1"
   }
 }
