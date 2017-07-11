@@ -21,14 +21,93 @@ const accepts = require('accepts')
 const graphql = require('graphql')
 const httpError = require('http-errors')
 const url = require('url')
+const path = require('path')
+const fs = require('fs')
 
 const parseBody = require('./parseBody')
 const renderGraphiQL = require('./renderGraphiQL')
 
-exports.serveHTTP = (options, fn) => {
-	const httpHandler = graphqlHTTP(options)
-	return (req, res) => httpHandler(req, res).then(results => fn(req, res, results))
+/*eslint-disable */
+const webconfigPath = path.join(process.cwd(), 'webconfig.json')
+/*eslint-enable */
+const webconfig = fs.existsSync(webconfigPath) ? require(webconfigPath) : null
+
+let headersCollection = null
+const getHeadersCollection = (headers = {}) => {
+	if (headersCollection == null) {
+		headersCollection = []
+		for (let key in headers)
+			headersCollection.push({ key, value: headers[key] })
+	}
+	return headersCollection
 }
+
+let allowedOrigins = null
+const getAllowedOrigins = (headers = {}) => {
+	if (allowedOrigins == null) {
+		allowedOrigins = (headers['Access-Control-Allow-Origin'] || '').split(',')
+			.reduce((a, s) => { 
+				if (s)
+					a[s.trim().toLowerCase().replace(/\/$/,'')] = true 
+				return a 
+			}, {})
+	}
+	return allowedOrigins
+}  
+
+let allowedMethods = null
+const getAllowedMethods = (headers = {}) => {
+	if (allowedMethods == null) {
+		allowedMethods = (headers['Access-Control-Allow-Methods'] || '').split(',')
+			.reduce((a, s) => { 
+				if (s)
+					a[s.trim().toLowerCase()] = true 
+				return a 
+			}, {})
+	}
+	return allowedMethods
+}  
+
+const setResponse = (res, webconfig, statusCode, data = '') => Promise.resolve(webconfig && webconfig.headers ? webconfig.headers : null)
+	.then(headers => getHeadersCollection(headers).reduce((response, header) => res.set(header.key, header.value), res))
+	.then(res => statusCode ? res.status(statusCode).send(data) : res)
+
+const serveHttp = (req, res, webconfig) => Promise.resolve(webconfig && webconfig.headers ? webconfig.headers : {})
+	.then(headers => {
+		const origins = getAllowedOrigins(headers)
+		const methods = getAllowedMethods(headers)
+		const origin = new String(req.headers.origin)
+		const method = new String(req.method).toLowerCase()
+
+		// Check CORS
+		if (!origins['*'] && Object.keys(origins).length != 0 && !(origin in origins))
+			return setResponse(res, webconfig, 403, `Forbidden - CORS issue. Origin '${origin} is not allowed.'`)
+		if (Object.keys(methods).length != 0 && method != 'get' && method != 'head' && !(method in methods))
+			return setResponse(res, webconfig, 403, `Forbidden - CORS issue. Method '${method.toUpperCase()}' is not allowed.`)
+
+		if (method == 'head' || method == 'options')
+			return setResponse(res, webconfig, 200)
+	})
+
+exports.serveHTTP = (getOptions, fn) => (req, res) => serveHttp(req, res, webconfig).then(() => {
+	if (!res.headersSent) {
+		if (!getOptions) 
+			throw new Error('GraphQL middleware requires getOptions.')
+		else {
+			const optionType = typeof(getOptions)
+			const getHttpHandler = 
+				optionType == 'object' ? Promise.resolve(graphqlHTTP(getOptions)) :
+					optionType == 'function' ? getOptions(req, res).then(options => !res.headersSent ? graphqlHTTP(options) : null) : 
+						null
+
+			if (!getHttpHandler)
+				throw new Error(`GraphQL middleware requires a valid 'getOptions' argument(allowed types: 'object', 'function'). Type '${typeof(getOptions)}' is invalid.`)
+
+			if (!res.headersSent)
+				return getHttpHandler.then(httpHandler => httpHandler(req, res).then(results => fn(req, res, results)))
+		}
+	}
+})
 
 /**
  * Middleware for your server; takes an options object or function as input to
@@ -306,7 +385,7 @@ function canDisplayGraphiQL(request, params) {
  */
 function sendResponse(response, data) {
 	if (typeof response.send === 'function') {
-		response.send(data)
+		setResponse(response, webconfig, 200, data)
 	} else {
 		response.end(data)
 	}
