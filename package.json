@@ -37,7 +37,7 @@
     "raw-body": "^2.2.0",
     "standard-version": "^4.2.0",
     "url": "^0.11.0",
-    "webfunc": "0.1.0-alpha.6"
+    "webfunc": "^0.1.0-alpha.6"
   },
   "devDependencies": {
     "eslint": "^4.1.1"

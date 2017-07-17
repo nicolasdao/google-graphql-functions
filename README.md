@@ -1,7 +1,7 @@
 <a href="https://neap.co" target="_blank"><img src="https://neap.co/img/neap_black_small_logo.png" alt="Neap Pty Ltd logo" title="Neap" align="right" height="50" width="120"/></a>
 
-# GraphiQL For Google Cloud Functions
-## Table Of Content
+# GraphQL For Google Cloud Functions
+## Table Of Contents
 * [TL;DR](#tldr)
 * [Overview](#overview)
 * [Step A - Configure Your Google Cloud Functions Environment](#step-a---create-a-new-google-cloud-functions-on-gcp)
@@ -14,6 +14,7 @@
   - [A.3. GraphQl Code Details](#a3-graphql-code-details)
   - [A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook](#a4-why-you-need-to-add-npm-dedupe-as-a-post-install-hook)
 * [License](#license)
+
 
 ## TL;DR
 If you're already familiar with Google Cloud Functions, GraphQl, and GraphiQl, then this TL;DR might be good enough. Otherwise, jump to the next [Overview](#overview) section, and follow each steps. 
@@ -34,22 +35,30 @@ exports.helloWorld = function(req, res) { ... }
 ```
 with:
 ```js
-const graphQl = require('google-graphql-functions');
+const graphQl = require('google-graphql-functions')
 
 const executableSchema = ... // schema you should have built using the standard graphql.js or Apollo's graphql-tools.js.
 const graphql_options = {
     schema: executableSchema, 
     graphiql: true,
     endpointURL: "/graphiql"
-};
+}
 
-exports.helloWorld = graphQl.serveHTTP(graphql_options, (req, res, results) => {
-    //Some code to inspect req, res, or results
-});
+exports.helloWorld = graphQl.serveHTTP(graphql_options)
+```
+If you need to support CORS, add a _**webconfig.json**_ file under your project's root folder and add a configuration similar to the following:
+```js
+{
+  "headers": {
+    "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Max-Age": "1296000"
+  }
+}
 ```
 
-#### WARNING
-In the piece of code above, you won't be able to do a ``` res.status(200).send("Hello World") ``` as the http header will already be set the graphQl interpreter. This is a GraphQl server. Therefore, it only returns GraphQl responses. If you need to manipulate data, you will have to do this inside the resolver. This is beyond the scope of this document. You can find a simple example below, under the [Step C](#step-c---create-&-deploy-your-graphql-dummy-api-to-your-local-machine), and read more about it on the awesome [Apollo's website](http://dev.apollodata.com/tools/), as well as on the official Facebook [GraphQl website](http://graphql.org/learn/). 
+Google-graphql-functions is built on top of the [_**webfunc**_](https://github.com/nicolasdao/webfunc) package. [_**webfunc**_](https://github.com/nicolasdao/webfunc) is a lightweight HTTP handler & project setup tool for Google Cloud Functions. For more details on how to configure its _webconfig.json_ file, as well as how to use it to easily deploy your project to your Google Cloud Account, please visit its GitHub page [here](https://github.com/nicolasdao/webfunc).
 
 
 ## Overview
@@ -150,7 +159,7 @@ type Query {
 schema {
   query: Query
 }
-`;
+`
 
 const productResolver = {
 
@@ -170,7 +179,7 @@ const productResolver = {
 }
 
 // This `findBy` method simulates a database query, hence it returning a promise.
-const findBy = (field, value) => Promise.resolve(product.filter(product => product[field] === value));
+const findBy = (field, value) => Promise.resolve(product.filter(product => product[field] === value))
 
 const product = [{
     name: 'Magic Wand',
@@ -187,19 +196,19 @@ const product = [{
     id: 3,
     brandRefId: 'm2',
     shortDescription: "Weird thing I wear when I'm drunk."
-}];
+}]
 
 
 const executableSchema = makeExecutableSchema({
     typeDefs: schema,
     resolvers: _.merge(productResolver.root) // merge using lodash, for example
-});
+})
 
 const graphql_options = {
     schema: executableSchema,
     graphiql: true,
     endpointURL: "/graphiql"
-};
+}
 
 /**
  * Responds to any HTTP request that can provide a "message" field in the body.
@@ -207,9 +216,7 @@ const graphql_options = {
  * @param {!Object} req Cloud Function request context.
  * @param {!Object} res Cloud Function response context.
  */
-exports.main = graphQl.serveHTTP(graphql_options, (req, res, results) => {
-    //Some code to inspect req, res, or results
-});
+exports.main = graphQl.serveHTTP(graphql_options)
 
 // WARNING:
 // In the piece of code above, you won't be able to do a 'res.status(200).send("Hello World")' 
@@ -246,6 +253,23 @@ The steps to deploy:
   ```bash
   gcloud beta functions deploy [FUNCTION-NAME] --stage-bucket [BUCKET-NAME] --trigger-http --entry-point main
   ```
+
+**6** - Adding CORS Support
+
+If you need to support CORS, add a _**webconfig.json**_ file under your project's root folder and add a configuration similar to the following:
+```js
+{
+  "headers": {
+    "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS, POST",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Max-Age": "1296000"
+  }
+}
+```
+
+Google-graphql-functions is built on top of the [_**webfunc**_](https://github.com/nicolasdao/webfunc) package. [_**webfunc**_](https://github.com/nicolasdao/webfunc) is a lightweight HTTP handler & project setup tool for Google Cloud Functions. For more details on how to configure its _webconfig.json_ file, as well as how to use it to easily deploy your project to your Google Cloud Account, please visit its GitHub page [here](https://github.com/nicolasdao/webfunc).
+
 ## This Is What We re Up To
 We are Neap, an Australian Technology consultancy powering the startup ecosystem in Sydney. We simply love building Tech and also meeting new people, so don't hesitate to connect with us at [https://neap.co](https://neap.co).
 
