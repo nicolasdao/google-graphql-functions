@@ -1,6 +1,24 @@
 <a href="https://neap.co" target="_blank"><img src="https://neap.co/img/neap_black_small_logo.png" alt="Neap Pty Ltd logo" title="Neap" align="right" height="50" width="120"/></a>
 
 # GraphQL For Google Cloud Functions
+
+## Install
+Using npm in an existing Google Cloud Functions project:
+```bash
+npm install graphql google-graphql-functions --save
+```
+Or, using [_**webfunc**_](https://github.com/nicolasdao/webfunc) to initialize a brand new project:
+```
+webfunc init your-app
+```
+Choose the GraphQL project type, and then:
+```
+cd your-app
+npm install
+webfunc deploy
+```
+This will start your local [google cloud functions emulator](https://github.com/GoogleCloudPlatform/cloud-functions-emulator) and host it there.
+
 ## Table Of Contents
 * [TL;DR](#tldr)
 * [Overview](#overview)
@@ -15,7 +33,6 @@
   - [A.4. Why You Need To Add ``` npm dedupe ``` As a Post Install Hook](#a4-why-you-need-to-add-npm-dedupe-as-a-post-install-hook)
 * [License](#license)
 
-
 ## TL;DR
 If you're already familiar with Google Cloud Functions, GraphQl, and GraphiQl, then this TL;DR might be good enough. Otherwise, jump to the next [Overview](#overview) section, and follow each steps. 
 
@@ -23,11 +40,7 @@ If you're totally unfamiliar with GraphQl, here is a series of intro posts that 
 - [GraphQL Overview - Getting Started with GraphQL and Node.js](https://blog.risingstack.com/graphql-overview-getting-started-with-graphql-and-nodejs/)
 - [Introduction to GraphQL](http://graphql.org/learn/)
 
-#### Installation
-```bash
-npm install graphql google-graphql-functions --save
-```
-#### In your Google Cloud Function index.js:
+If you're starting from standard Google Cloud Functions project, in your index.js:
 
 Replace:
 ```js
@@ -35,16 +48,16 @@ exports.helloWorld = function(req, res) { ... }
 ```
 with:
 ```js
-const graphQl = require('google-graphql-functions')
+const { serveHTTP } = require('google-graphql-functions')
 
 const executableSchema = ... // schema you should have built using the standard graphql.js or Apollo's graphql-tools.js.
-const graphql_options = {
+const graphqlOptions = {
     schema: executableSchema, 
     graphiql: true,
     endpointURL: "/graphiql"
 }
 
-exports.helloWorld = graphQl.serveHTTP(graphql_options)
+exports.helloWorld = serveHTTP(graphqlOptions)
 ```
 If you need to support CORS, add a _**webconfig.json**_ file under your project's root folder and add a configuration similar to the following:
 ```js
@@ -60,6 +73,16 @@ If you need to support CORS, add a _**webconfig.json**_ file under your project'
 
 Google-graphql-functions is built on top of the [_**webfunc**_](https://github.com/nicolasdao/webfunc) package. [_**webfunc**_](https://github.com/nicolasdao/webfunc) is a lightweight HTTP handler & project setup tool for Google Cloud Functions. For more details on how to configure its _webconfig.json_ file, as well as how to use it to easily deploy your project to your Google Cloud Account, please visit its GitHub page [here](https://github.com/nicolasdao/webfunc).
 
+If [_**webfunc**_](https://github.com/nicolasdao/webfunc) has been installed globally, you can also initiate a new GraphQL project ready to be hosted on Google Cloud Functions as follow:
+```
+webfunc init your-app
+```
+Choose the GraphQL project type, and then:
+```
+cd your-app
+npm install
+webfunc deploy
+```
 
 ## Overview
 
@@ -129,103 +152,58 @@ _More details on those dependencies in annex [A.2. List Of Dependencies](#a2-lis
 
 **3** - Paste this demo code into the index.js
 ```js
-const graphQl = require('google-graphql-functions');
-const _ = require('lodash');
-const makeExecutableSchema = require('graphql-tools').makeExecutableSchema;
+const { serveHTTP } = require('google-graphql-functions')
+const makeExecutableSchema = require('graphql-tools').makeExecutableSchema
+const _ = require('lodash')
 
+// Replace 
 const schema = `
 type Product {
-  brandRefId: String!
   id: ID!
   name: String!
   shortDescription: String
 }
 
 type Query {
-
-  # ### GET the product that matches this id
+  # ### GET products
   #
   # _Arguments_
-  # - **id**: ID of the object
-  productById(id: Int!): Product
-
-  # ### GET the products for a specific brand 
-  #
-  # _Arguments_
-  # - **brandRefId**: Reference ID of the brand
-  productsByBrand(brandRefId: String!): [Product]
+  # - **id**: Product's id (optional)
+  products(id: Int): [Product]
 }
 
 schema {
   query: Query
 }
 `
-
+const productMocks = [{ id: 1, name: 'Product A', shortDescription: 'First product.' }, { id: 2, name: 'Product B', shortDescription: 'Second product.' }]
 const productResolver = {
-
-    root: {
-        Query: {
-            productById(root, { id }, context) {
-                return findBy('id', id).then(product => {
-                    return product ? product[0] : [];
-                });
-            },
-
-            productsByBrand(root, { brandRefId }, context) {
-                return findBy('brandRefId', brandRefId);
-            }
+    Query: {
+        products(root, { id }, context) {
+          const results = id ? _(productMocks).filter(p => p.id == id) : productMocks
+          if (results)
+            return results
+          else
+            throw httpError(404, `Product with id ${id} does not exist.`)
         }
     }
 }
 
-// This `findBy` method simulates a database query, hence it returning a promise.
-const findBy = (field, value) => Promise.resolve(product.filter(product => product[field] === value))
-
-const product = [{
-    name: 'Magic Wand',
-    id: 1,
-    brandRefId: 'm1',
-    shortDescription: "Piece of wood with some magic shenanigan."
-}, {
-    name: 'Catapult',
-    id: 2,
-    brandRefId: 'm2',
-    shortDescription: "Contraption that throws heavy rocks at my ennemy's face."
-}, {
-    name: 'Wig',
-    id: 3,
-    brandRefId: 'm2',
-    shortDescription: "Weird thing I wear when I'm drunk."
-}]
-
-
 const executableSchema = makeExecutableSchema({
     typeDefs: schema,
-    resolvers: _.merge(productResolver.root) // merge using lodash, for example
+    // This seems silly to use merge here as there is only one resolver.
+    // We could have written: 'resolvers: productResolver'
+    // In reality, you'd probably have more than one resolver: 'resolvers: _.merge(productResolver, userResolver)'
+    resolvers: _.merge(productResolver) 
 })
 
-const graphql_options = {
+const graphqlOptions = {
     schema: executableSchema,
     graphiql: true,
     endpointURL: "/graphiql"
 }
 
-/**
- * Responds to any HTTP request that can provide a "message" field in the body.
- *
- * @param {!Object} req Cloud Function request context.
- * @param {!Object} res Cloud Function response context.
- */
-exports.main = graphQl.serveHTTP(graphql_options)
-
-// WARNING:
-// In the piece of code above, you won't be able to do a 'res.status(200).send("Hello World")' 
-// as the http header will already be set the graphQl interpreter. This is a GraphQl server. 
-// Therefore, it only returns GraphQl responses. If you need to manipulate data, you will have to 
-// do this inside the resolver. This is beyond the scope of this document. You can find a simple 
-// example below, under the Step C, and read more about it on the awesome Apollo's website 
-// (http://dev.apollodata.com/tools/), as well as on the official Facebook GraphQl website 
-// (http://graphql.org/learn/).
+exports.Graphql = serveHTTP(graphqlOptions)
 ```
 _More details on the code above in annex [A.3. GraphQl Code Details](#a3-graphql-code-details)_
 
