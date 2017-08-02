@@ -7,15 +7,15 @@ Using npm in an existing Google Cloud Functions project:
 ```bash
 npm install graphql google-graphql-functions --save
 ```
-Or, using [_**webfunc**_](https://github.com/nicolasdao/webfunc) to initialize a brand new project:
+Or, using [_**gimpy**_](https://github.com/nicolasdao/gimpy) to initialize a brand new project:
 ```
-webfunc init your-app
+gimp new graphql-gcf your-app
 ```
-Choose the GraphQL project type, and then:
+After answering all the questions
 ```
 cd your-app
 npm install
-webfunc deploy
+gimp deploy
 ```
 This will start your local [google cloud functions emulator](https://github.com/GoogleCloudPlatform/cloud-functions-emulator) and host it there.
 
@@ -59,7 +59,7 @@ const graphqlOptions = {
 
 exports.helloWorld = serveHTTP(graphqlOptions)
 ```
-If you need to support CORS, add a _**webconfig.json**_ file under your project's root folder and add a configuration similar to the following:
+If you need to support CORS, add a _**appconfig.json**_ file under your project's root folder and add a configuration similar to the following:
 ```js
 {
   "headers": {
@@ -71,22 +71,22 @@ If you need to support CORS, add a _**webconfig.json**_ file under your project'
 }
 ```
 
-Google-graphql-functions is built on top of the [_**webfunc**_](https://github.com/nicolasdao/webfunc) package. [_**webfunc**_](https://github.com/nicolasdao/webfunc) is a lightweight HTTP handler & project setup tool for Google Cloud Functions. For more details on how to configure its _webconfig.json_ file, as well as how to use it to easily deploy your project to your Google Cloud Account, please visit its GitHub page [here](https://github.com/nicolasdao/webfunc).
+Google-graphql-functions is built on top of the [_**webfunc**_](https://github.com/nicolasdao/webfunc) package. [_**webfunc**_](https://github.com/nicolasdao/webfunc) is a lightweight HTTP handler & project environment variables manager. For more details on how to configure its _appconfig.json_ file, please visit its GitHub page [here](https://github.com/nicolasdao/webfunc). 
 
-If [_**webfunc**_](https://github.com/nicolasdao/webfunc) has been installed globally, you can also initiate a new GraphQL project ready to be hosted on Google Cloud Functions as follow:
+If you're using [_**gimpy**_](https://github.com/nicolasdao/gimpy), you can also initiate a new GraphQL project ready to be hosted on Google Cloud Functions as follow:
 ```
-webfunc init your-app
+gimp new graphql-gcf your-app
 ```
-Choose the GraphQL project type, and then:
+After answering all the questions
 ```
 cd your-app
 npm install
-webfunc deploy
+gimp deploy
 ```
 
 ## Overview
 
-**_google-graphql-functions_** is a JS module that will help you to deploy your first dummy GraphQl API to a Google Cloud Functions endpoint, or to your local machine. The data are hardcoded for the sake of brevity, but you could easily replace that bit of code with your own DB or external APIs requests. 
+**_google-graphql-functions_** is a JS module that will help you to deploy your first dummy GraphQl API to a Google Cloud Functions endpoint, or to your local machine. In this tutorial, the data are hardcoded for the sake of brevity, but you could easily replace that bit of code with your own DB or external APIs requests. 
 
 Beyond just querying GraphQl, **_google-graphql-functions_** will also allow you to expose a [_GraphiQl UI_](https://github.com/graphql/graphiql) to help develop, test, and collaborate. **_GraphiQl_** is nothing more than an HTML page that contains your own GraphQl schema. You're responsible for hosting it as well as injecting your schema into it so that your clients can interact with your GraphQl api in a friendly way. It supports validation as well as auto-complete.
 
@@ -234,7 +234,7 @@ The steps to deploy:
 
 **6** - Adding CORS Support
 
-If you need to support CORS, add a _**webconfig.json**_ file under your project's root folder and add a configuration similar to the following:
+If you need to support CORS, add a _**appconfig.json**_ file under your project's root folder and add a configuration similar to the following:
 ```js
 {
   "headers": {
@@ -246,7 +246,18 @@ If you need to support CORS, add a _**webconfig.json**_ file under your project'
 }
 ```
 
-Google-graphql-functions is built on top of the [_**webfunc**_](https://github.com/nicolasdao/webfunc) package. [_**webfunc**_](https://github.com/nicolasdao/webfunc) is a lightweight HTTP handler & project setup tool for Google Cloud Functions. For more details on how to configure its _webconfig.json_ file, as well as how to use it to easily deploy your project to your Google Cloud Account, please visit its GitHub page [here](https://github.com/nicolasdao/webfunc).
+Google-graphql-functions is built on top of the [_**webfunc**_](https://github.com/nicolasdao/webfunc) package. [_**webfunc**_](https://github.com/nicolasdao/webfunc) is a lightweight HTTP handler & project environment variables manager. For more details on how to configure its _appconfig.json_ file, please visit its GitHub page [here](https://github.com/nicolasdao/webfunc). 
+
+If you're using [_**gimpy**_](https://github.com/nicolasdao/gimpy), you can also initiate a new GraphQL project ready to be hosted on Google Cloud Functions as follow:
+```
+gimp new graphql-gcf your-app
+```
+After answering all the questions
+```
+cd your-app
+npm install
+gimp deploy
+```
 
 ## This Is What We re Up To
 We are Neap, an Australian Technology consultancy powering the startup ecosystem in Sydney. We simply love building Tech and also meeting new people, so don't hesitate to connect with us at [https://neap.co](https://neap.co).
