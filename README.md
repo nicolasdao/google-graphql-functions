@@ -155,6 +155,7 @@ _More details on those dependencies in annex [A.2. List Of Dependencies](#a2-lis
 const { serveHTTP } = require('google-graphql-functions')
 const makeExecutableSchema = require('graphql-tools').makeExecutableSchema
 const _ = require('lodash')
+const httpError = require('http-errors')
 
 // Replace 
 const schema = `
