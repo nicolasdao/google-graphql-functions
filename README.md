@@ -1,6 +1,12 @@
 <a href="https://neap.co" target="_blank"><img src="https://neap.co/img/neap_black_small_logo.png" alt="Neap Pty Ltd logo" title="Neap" align="right" height="50" width="120"/></a>
 
 # GraphQL For Google Cloud Functions
+[![NPM][1]][2] [![Tests][3]][4]
+
+[1]: https://img.shields.io/npm/v/google-graphql-functions.svg?style=flat
+[2]: https://www.npmjs.com/package/google-graphql-functions
+[3]: https://travis-ci.org/nicolasdao/google-graphql-functions.svg?branch=master
+[4]: https://travis-ci.org/nicolasdao/google-graphql-functions
 
 ## Install
 Using npm in an existing Google Cloud Functions project:
