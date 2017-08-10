@@ -22,9 +22,15 @@ const graphql = require('graphql')
 const { serveHttp } = require('webfunc')
 const httpError = require('http-errors')
 const url = require('url')
+const path = require('path')
 
 const parseBody = require('./parseBody')
 const renderGraphiQL = require('./renderGraphiQL')
+
+const mergeGraphqlOptionsWithEndpoint = (graphqlOptions = {}, endpointPath = '/') => 
+	graphqlOptions.endpointURL 
+		? Object.assign(graphqlOptions, { endpointURL: path.join(endpointPath, graphqlOptions.endpointURL) })
+		: graphqlOptions
 
 exports.serveHTTP = (arg1, arg2, arg3) => {
 	let route = null
@@ -67,14 +73,15 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 		}
 
 		const func = (req, res, params) => {
+			const httpEndpoint = ((req._parsedUrl || {}).pathname || '/').toLowerCase()
 			if (!res.headersSent) {
 				if (!getOptions) 
 					throw httpError(500, 'GraphQL middleware requires getOptions.')
 				else {
 					const optionType = typeof(getOptions)
 					const getHttpHandler = 
-						optionType == 'object' ? Promise.resolve(graphqlHTTP(getOptions)) :
-							optionType == 'function' ? getOptions(req, res, params).then(options => !res.headersSent ? graphqlHTTP(options) : null) : 
+						optionType == 'object' ? Promise.resolve(graphqlHTTP(mergeGraphqlOptionsWithEndpoint(getOptions, httpEndpoint))) :
+							optionType == 'function' ? getOptions(req, res, params).then(options => !res.headersSent ? graphqlHTTP(mergeGraphqlOptionsWithEndpoint(options, httpEndpoint)) : null) : 
 								null
 
 					if (!getHttpHandler)
