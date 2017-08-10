@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0-alpha.11"></a>
+# [0.1.0-alpha.11](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.10...v0.1.0-alpha.11) (2017-08-10)
+
+
+### Features
+
+* Add routing support + add unit test + travis config ([deddeee](https://github.com/nicolasdao/google-graphql-functions/commit/deddeee))
+
+
+
 <a name="0.1.0-alpha.10"></a>
 # [0.1.0-alpha.10](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.9...v0.1.0-alpha.10) (2017-08-02)
 
