@@ -27,9 +27,9 @@ const path = require('path')
 const parseBody = require('./parseBody')
 const renderGraphiQL = require('./renderGraphiQL')
 
-const mergeGraphqlOptionsWithEndpoint = (graphqlOptions = {}, endpointPath = '/') => 
-	graphqlOptions.endpointURL 
-		? Object.assign(graphqlOptions, { endpointURL: path.join(endpointPath, graphqlOptions.endpointURL) })
+const mergeGraphqlOptionsWithEndpoint = (graphqlOptions = {}, endpointPath = '/') =>
+	graphqlOptions.endpointURL && !graphqlOptions.endpointURLAlreadyModified
+		? Object.assign(graphqlOptions, { endpointURL: path.join(endpointPath, graphqlOptions.endpointURL), endpointURLAlreadyModified: true })
 		: graphqlOptions
 
 exports.serveHTTP = (arg1, arg2, arg3) => {
@@ -52,7 +52,7 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument is required and must either be a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
 			if (typeOfArg2 != 'object' && typeOfArg2 != 'function')
 				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument must either be a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
-			if (arg2.length != undefined)
+			if (typeOfArg2 == 'object' && arg2.length >= 0)
 				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument of the \'serveHTTP\' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
 			if (typeOfArg2 == 'object' && !arg2.schema)
 				throw new Error('If the first argument of the \'serveHTTP\' method is a route and the second a graphQL object, then the second argument must contain a valid property called \'schema\'.')
