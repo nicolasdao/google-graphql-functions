@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0-alpha.15"></a>
+# [0.1.0-alpha.15](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.14...v0.1.0-alpha.15) (2017-08-10)
+
+
+### Bug Fixes
+
+* routing issue ([343615b](https://github.com/nicolasdao/google-graphql-functions/commit/343615b))
+
+
+
 <a name="0.1.0-alpha.14"></a>
 # [0.1.0-alpha.14](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.13...v0.1.0-alpha.14) (2017-08-10)
 
