@@ -19,7 +19,7 @@
 
 const accepts = require('accepts')
 const graphql = require('graphql')
-const { serveHttp } = require('webfunc')
+const { serveHttp, routing } = require('webfunc')
 const httpError = require('http-errors')
 const url = require('url')
 const path = require('path')
@@ -34,6 +34,7 @@ const mergeGraphqlOptionsWithEndpoint = (graphqlOptions = {}, endpointPath = '/'
 
 exports.serveHTTP = (arg1, arg2, arg3) => {
 	let route = null
+	let routeDetails = null
 	let getOptions = null
 	let appConfig = null
 	const typeOfArg1 = typeof(arg1 || undefined)
@@ -46,6 +47,7 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 		
 		if (typeOfArg1 == 'string') {
 			route = arg1
+			routeDetails = routing.getRouteDetails(route)
 			if (!arg2)
 				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument is required and must either be a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
 			if (typeOfArg2 != 'object' && typeOfArg2 != 'function')
@@ -74,14 +76,15 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 
 		const func = (req, res, params) => {
 			const httpEndpoint = ((req._parsedUrl || {}).pathname || '/').toLowerCase()
+			const endpoint = routeDetails ? ((routing.matchRoute(httpEndpoint, routeDetails) || {}).match || '/') : '/'
 			if (!res.headersSent) {
 				if (!getOptions) 
 					throw httpError(500, 'GraphQL middleware requires getOptions.')
 				else {
 					const optionType = typeof(getOptions)
 					const getHttpHandler = 
-						optionType == 'object' ? Promise.resolve(graphqlHTTP(mergeGraphqlOptionsWithEndpoint(getOptions, httpEndpoint))) :
-							optionType == 'function' ? getOptions(req, res, params).then(options => !res.headersSent ? graphqlHTTP(mergeGraphqlOptionsWithEndpoint(options, httpEndpoint)) : null) : 
+						optionType == 'object' ? Promise.resolve(graphqlHTTP(mergeGraphqlOptionsWithEndpoint(getOptions, endpoint))) :
+							optionType == 'function' ? getOptions(req, res, params).then(options => !res.headersSent ? graphqlHTTP(mergeGraphqlOptionsWithEndpoint(options, endpoint)) : null) : 
 								null
 
 					if (!getHttpHandler)
@@ -104,7 +107,7 @@ function graphqlHTTP(options) {
 	if (!options) {
 		throw new Error('GraphQL middleware requires options.')
 	}
-
+	
 	return (request, response) => {
 		// Higher scoped variables are referred to at various stages in the
 		// asynchronous state machine below.
