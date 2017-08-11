@@ -28,8 +28,8 @@ const parseBody = require('./parseBody')
 const renderGraphiQL = require('./renderGraphiQL')
 
 const mergeGraphqlOptionsWithEndpoint = (graphqlOptions = {}, endpointPath = '/') =>
-	graphqlOptions.endpointURL && !graphqlOptions.endpointURLAlreadyModified
-		? Object.assign(graphqlOptions, { endpointURL: path.join(endpointPath, graphqlOptions.endpointURL), endpointURLAlreadyModified: true })
+	graphqlOptions.endpointURL
+		? Object.assign({}, graphqlOptions, { endpointURL: path.join(endpointPath, graphqlOptions.endpointURL) })
 		: graphqlOptions
 
 exports.serveHTTP = (arg1, arg2, arg3) => {
@@ -43,17 +43,17 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 
 	if (arg1) {
 		if (typeOfArg1 != 'string' && typeOfArg1 != 'object' && typeOfArg1 != 'function')
-			throw new Error('The first argument of the \'serveHTTP\' method can only be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
+			throw new Error('The first argument of the \'serveHTTP\' method can only be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.')
 		
 		if (typeOfArg1 == 'string') {
 			route = arg1
 			routeDetails = routing.getRouteDetails(route)
 			if (!arg2)
-				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument is required and must either be a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
+				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument is required and must either be a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.')
 			if (typeOfArg2 != 'object' && typeOfArg2 != 'function')
-				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument must either be a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
+				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument must either be a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.')
 			if (typeOfArg2 == 'object' && arg2.length >= 0)
-				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument of the \'serveHTTP\' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
+				throw new Error('If the first argument of the \'serveHTTP\' method is a route, then the second argument of the \'serveHTTP\' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.')
 			if (typeOfArg2 == 'object' && !arg2.schema)
 				throw new Error('If the first argument of the \'serveHTTP\' method is a route and the second a graphQL object, then the second argument must contain a valid property called \'schema\'.')
 
@@ -64,7 +64,7 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 		}
 		else {
 			if (arg1.length != undefined)
-				throw new Error('The first argument of the \'serveHTTP\' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
+				throw new Error('The first argument of the \'serveHTTP\' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.')
 			if (typeOfArg1 == 'object' && !arg1.schema)
 				throw new Error('If the first argument of the \'serveHTTP\' method is a graphQL object, then it must contain a valid property called \'schema\'.')
 
@@ -74,6 +74,12 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 			appConfig = arg2
 		}
 
+		const optionType = typeof(getOptions)
+		const getNewOptions = optionType == 'object'
+			? () => Promise.resolve(getOptions) :
+			optionType == 'function' ? (req, res, params) => Promise.resolve(getOptions(req, res, params)) : 
+				() => Promise.resolve({})
+
 		const func = (req, res, params) => {
 			const httpEndpoint = ((req._parsedUrl || {}).pathname || '/').toLowerCase()
 			const endpoint = routeDetails ? ((routing.matchRoute(httpEndpoint, routeDetails) || {}).match || '/') : '/'
@@ -81,16 +87,12 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 				if (!getOptions) 
 					throw httpError(500, 'GraphQL middleware requires getOptions.')
 				else {
-					const optionType = typeof(getOptions)
-					const getHttpHandler = 
-						optionType == 'object' ? Promise.resolve(graphqlHTTP(mergeGraphqlOptionsWithEndpoint(getOptions, endpoint))) :
-							optionType == 'function' ? getOptions(req, res, params).then(options => !res.headersSent ? graphqlHTTP(mergeGraphqlOptionsWithEndpoint(options, endpoint)) : null) : 
-								null
-
-					if (!getHttpHandler)
-						throw httpError(500, `GraphQL middleware requires a valid 'getOptions' argument(allowed types: 'object', 'function'). Type '${typeof(getOptions)}' is invalid.`)
-
-					return getHttpHandler.then(httpHandler => httpHandler(req, res))
+					const getHttpHandler = getNewOptions(req, res, params).then(options => !res.headersSent ? graphqlHTTP(mergeGraphqlOptionsWithEndpoint(options, endpoint)) : null) 
+					return getHttpHandler.then(httpHandler => {
+						if (!httpHandler)
+							throw httpError(500, 'GraphQL middleware requires a valid \'getOptions\' argument.')
+						return httpHandler(req, res)
+					})
 				}
 			}
 		}
@@ -98,7 +100,7 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 		return route ? serveHttp(route, func, appConfig) : serveHttp(func, appConfig)
 	}
 	else
-		throw new Error('The first argument of the \'serveHTTP\' method is required. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.')
+		throw new Error('The first argument of the \'serveHTTP\' method is required. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.')
 }
 
 exports.graphqlHTTP = graphqlHTTP

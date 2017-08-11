@@ -25,9 +25,9 @@ describe('index', () =>
 
 			const endpoints = [1,2]
 
-			assert.throws(() => serveHTTP('/users/{username}', endpoints, appconfig), Error, `If the first argument of the 'serveHTTP' method is a route, then the second argument of the 'serveHTTP' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.`)
+			assert.throws(() => serveHTTP('/users/{username}', endpoints, appconfig), Error, `If the first argument of the 'serveHTTP' method is a route, then the second argument of the 'serveHTTP' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.`)
 			assert.throws(() => serveHTTP('/users/{username}', appconfig), Error, `If the first argument of the 'serveHTTP' method is a route and the second a graphQL object, then the second argument must contain a valid property called 'schema'.`)
-			assert.throws(() => serveHTTP(), Error, `The first argument of the 'serveHTTP' method is required. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a promise containing a graphQL option object.`)
+			assert.throws(() => serveHTTP(), Error, `The first argument of the 'serveHTTP' method is required. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.`)
 			assert.throws(() => serveHTTP(appconfig), Error, `If the first argument of the 'serveHTTP' method is a graphQL object, then it must contain a valid property called 'schema'.`)
 		})))
 
@@ -79,10 +79,21 @@ describe('index', () =>
 					referer: 'http://localhost:8080'
 				},
 				_parsedUrl: {
-					pathname: '/users/graphiql'
+					pathname: '/users/nicolas/graphiql'
 				}
 			})
 			const res_01 = httpMocks.createResponse()
+			const req_02 = httpMocks.createRequest({
+				method: 'GET',
+				headers: {
+					origin: 'http://localhost:8080',
+					referer: 'http://localhost:8080'
+				},
+				_parsedUrl: {
+					pathname: '/users/brendan/graphiql'
+				}
+			})
+			const res_02 = httpMocks.createResponse()
 
 			const appconfig = {
 				headers: {
@@ -93,9 +104,14 @@ describe('index', () =>
 				}
 			}
 
-			const fn = serveHTTP('/users', { schema: {} }, appconfig)
+			const fn = serveHTTP('/users/{username}', { schema: {}, endpointURL: '/graphiql' }, appconfig)
 			
 			const result_01 = fn(req_01, res_01).then(() => {
+				assert.equal(1,1)
+			})
+				.catch(() => assert.equal(1,2, `This request should have succeeded.`))
+
+			const result_02 = fn(req_02, res_02).then(() => {
 				assert.equal(1,1)
 			})
 				.catch(() => assert.equal(1,2, `This request should have succeeded.`))
