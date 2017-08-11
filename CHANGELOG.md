@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0-alpha.17"></a>
+# [0.1.0-alpha.17](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.16...v0.1.0-alpha.17) (2017-08-11)
+
+
+### Bug Fixes
+
+* Graphql Options endpoint for routing ([ff9ba53](https://github.com/nicolasdao/google-graphql-functions/commit/ff9ba53))
+
+
+
 <a name="0.1.0-alpha.16"></a>
 # [0.1.0-alpha.16](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.15...v0.1.0-alpha.16) (2017-08-10)
 
