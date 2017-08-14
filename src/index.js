@@ -63,7 +63,7 @@ exports.serveHTTP = (arg1, arg2, arg3) => {
 			appConfig = arg3
 		}
 		else {
-			if (arg1.length != undefined)
+			if (typeOfArg1 == 'object' && arg1.length >= 0)
 				throw new Error('The first argument of the \'serveHTTP\' method cannot be an array. It must either be a route, a graphQL options object, or a function similar to (req, res, params) => ... that returns a graphQL option object or a promise returning a graphql object.')
 			if (typeOfArg1 == 'object' && !arg1.schema)
 				throw new Error('If the first argument of the \'serveHTTP\' method is a graphQL object, then it must contain a valid property called \'schema\'.')

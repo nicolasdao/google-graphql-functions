@@ -167,3 +167,53 @@ describe('index', () =>
 
 			return Promise.all([result_01, result_02])
 		})))
+
+/*eslint-disable */
+describe('index', () => 
+	describe('#serveHTTP: 05', () => 
+		it(`Should succeed if the first argument if a function returning either a graphQl option object or a Promise that returns a graphQL option object.`, () => {
+			/*eslint-enable */
+			const req_01 = httpMocks.createRequest({
+				method: 'GET',
+				headers: {
+					origin: 'http://localhost:8080',
+					referer: 'http://localhost:8080'
+				},
+				_parsedUrl: {
+					pathname: '/users/graphiql'
+				}
+			})
+			const res_01 = httpMocks.createResponse()
+			const req_02 = httpMocks.createRequest({
+				method: 'GET',
+				headers: {
+					origin: 'http://localhost:8080',
+					referer: 'http://localhost:8080'
+				}
+			})
+			const res_02 = httpMocks.createResponse()
+
+			const appconfig = {
+				headers: {
+					'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS, POST',
+					'Access-Control-Allow-Headers': 'Authorization, Content-Type, Origin',
+					'Access-Control-Allow-Origin': 'http://boris.com, http://localhost:8080',
+					'Access-Control-Max-Age': '1296000'
+				}
+			}
+
+			const fn_01 = serveHTTP(() => { schema: {} }, appconfig)
+			const fn_02 = serveHTTP(() => Promise.resolve({ schema: {} }), appconfig)
+			
+			const result_01 = fn_01(req_01, res_01).then(() => {
+				assert.equal(1,1)
+			})
+				.catch(() => assert.equal(1,2, `This request should have succeeded.`))
+			
+			const result_02 = fn_02(req_02, res_02).then(() => {
+				assert.equal(1,1)
+			})
+				.catch(() => assert.equal(1,2, `This request should have succeeded.`))
+
+			return Promise.all([result_01, result_02])
+		})))
