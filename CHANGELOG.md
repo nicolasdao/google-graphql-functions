@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.1.0-alpha.18"></a>
+# [0.1.0-alpha.18](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.17...v0.1.0-alpha.18) (2017-08-14)
+
+
+### Bug Fixes
+
+* Issue when serving the GrappQL option object using a function in serveHTTP ([c5794fa](https://github.com/nicolasdao/google-graphql-functions/commit/c5794fa))
+
+
+
 <a name="0.1.0-alpha.17"></a>
 # [0.1.0-alpha.17](https://github.com/nicolasdao/google-graphql-functions/compare/v0.1.0-alpha.16...v0.1.0-alpha.17) (2017-08-11)
 
