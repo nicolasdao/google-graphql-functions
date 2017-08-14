@@ -59,10 +59,11 @@ describe('index', () =>
 
 			const fn = serveHTTP('/users/{graphiqlpath}', { schema: {} }, appconfig)
 			
-			const result_01 = fn(req_01, res_01).then(() => {
-				assert.equal(1,2, 'Requests with the wrong route should failed with a \'not found\' error.')
+			const result_01 = fn(req_01, res_01).then(res => {
+				assert.equal(res.statusCode, 404)
+				assert.equal(res._getData(), 'Endpoint \'/\' not found.')
 			})
-				.catch(err => assert.equal(err.message, 'Endpoint \'/\' not found.'))
+				.catch(err => assert.equal(1,2, `Should fail but still return a response.`))
 
 			return Promise.all([result_01])
 		})))
