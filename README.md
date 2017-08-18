@@ -8,6 +8,9 @@
 [3]: https://travis-ci.org/nicolasdao/google-graphql-functions.svg?branch=master
 [4]: https://travis-ci.org/nicolasdao/google-graphql-functions
 
+## WARNING - This Project Has been moved to graphql-serverless
+As of Friday 18th of August 2017, this project has been moved to [_**graphql-serverless**_](https://github.com/nicolasdao/graphql-serverless). The reason was that initially, this project was designed specifically for Google Cloud Functions, but as the project matured, we realised that it could be used for any node.js serverless offering. Our aim is to empower developer to build scalable and robust application on any serveless offering so that they can only focus on what they best: Building product :).
+
 ## Install
 Using npm in an existing Google Cloud Functions project:
 ```bash
