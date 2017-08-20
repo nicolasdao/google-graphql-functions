@@ -18,7 +18,7 @@ npm install graphql google-graphql-functions --save
 ```
 Or, using [_**gimpy**_](https://github.com/nicolasdao/gimpy) to initialize a brand new project:
 ```
-gimp new graphql-gcf your-app
+gimp new graphql-serverless your-app
 ```
 After answering all the questions
 ```
@@ -84,7 +84,7 @@ Google-graphql-functions is built on top of the [_**webfunc**_](https://github.c
 
 If you're using [_**gimpy**_](https://github.com/nicolasdao/gimpy), you can also initiate a new GraphQL project ready to be hosted on Google Cloud Functions as follow:
 ```
-gimp new graphql-gcf your-app
+gimp new graphql-serverless your-app
 ```
 After answering all the questions
 ```
@@ -260,7 +260,7 @@ Google-graphql-functions is built on top of the [_**webfunc**_](https://github.c
 
 If you're using [_**gimpy**_](https://github.com/nicolasdao/gimpy), you can also initiate a new GraphQL project ready to be hosted on Google Cloud Functions as follow:
 ```
-gimp new graphql-gcf your-app
+gimp new graphql-serverless your-app
 ```
 After answering all the questions
 ```
